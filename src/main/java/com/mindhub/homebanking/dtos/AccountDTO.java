@@ -1,6 +1,7 @@
 package com.mindhub.homebanking.dtos;
 
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.TransactionType;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -68,5 +69,19 @@ public class AccountDTO {
 
     public void setTransactions(Set<TransactionDTO> transactions) {
         this.transactions = transactions;
+    }
+
+    public void updateBalance(TransactionType type, double amount) {
+        double total = getBalance();
+
+        switch (type) {
+            case CREDIT:
+                total = total + amount;
+                break;
+            case DEBIT:
+                total = total + amount;
+                break;
+        }
+        setBalance(total);
     }
 }

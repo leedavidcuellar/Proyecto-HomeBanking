@@ -114,4 +114,16 @@ public class Account {
         }
         setBalance(total);
     }
+
+    /*
+    public double getBalance(){
+     double total =0.0;
+        for(Transaction transaction:gertTransacion()){
+            switch(transaction.getType()){
+             case DEBIT: total + amount;
+             case CREDIT: total + amount;
+            }
+        }
+    }
+    */
 }
