@@ -79,14 +79,17 @@ public class HomebankingApplication {
 			accountRepository.save(account3);
 			accountRepository.save(account4);
 
-			Loan loan1 = new Loan("Hipotecario",5000.00, List.of(12,24,36,48,60));
+			Loan loan1 = new Loan("Hipotecario",500000.00, List.of(12,24,36,48,60));
 			loanRepository.save(loan1);
 			Loan loan2 = new Loan("Personal",100000.00, List.of(6,12,24));
 			loanRepository.save(loan2);
 			Loan loan3 = new Loan("Automotriz",300000.00, List.of(6,12,24,36));
 			loanRepository.save(loan3);
 
-			ClientLoan clientLoan1 = new ClientLoan(20000.00,2);
+			ClientLoan clientLoan1 = new ClientLoan(loan1,400000,60,cliente1);
+			ClientLoan clientLoan2 = new ClientLoan(loan2,50000,12,cliente1);
+			ClientLoan clientLoan3 = new ClientLoan(loan2,100000,24,cliente);
+			ClientLoan clientLoan4 = new ClientLoan(loan3,200000,36,cliente);
 		};
 	}
 }

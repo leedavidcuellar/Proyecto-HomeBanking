@@ -120,8 +120,10 @@ public class Account {
      double total =0.0;
         for(Transaction transaction:gertTransacion()){
             switch(transaction.getType()){
-             case DEBIT: total + amount;
-             case CREDIT: total + amount;
+             case DEBIT: total = total + amount;
+                    break;
+             case CREDIT: total = total + amount;
+                    break;
             }
         }
     }

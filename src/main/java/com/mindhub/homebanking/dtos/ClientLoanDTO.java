@@ -10,27 +10,28 @@ public class ClientLoanDTO {
     private Long id;
     private double amount;
     private int payments;
-    private Loan loans;
-    private Client client;
+    private Long loanId;
+    private String name;
 
     public ClientLoanDTO() {
     }
 
-    public ClientLoanDTO(Long id, double amount, int payments, Loan loans, Client client) {
+    public ClientLoanDTO(Long id, double amount, int payments, String name, Long loanId) {
         this.id = id;
         this.amount = amount;
         this.payments = payments;
-        this.loans = loans;
-        this.client = client;
+        this.loanId = loanId;
+        this.name = name;
     }
 
     public ClientLoanDTO(ClientLoan clientLoan){
         this.id = clientLoan.getId();
         this.amount = clientLoan.getAmount();
         this.payments = clientLoan.getPayments();
-        this.loans = clientLoan.getLoan();
-        this.client = clientLoan.getClient();
+        this.loanId = clientLoan.getLoan().getId();
+        this.name = clientLoan.getLoan().getName();
     }
+
 
     public Long getId() {
         return id;
@@ -56,19 +57,19 @@ public class ClientLoanDTO {
         this.payments = payments;
     }
 
-    public Loan getLoans() {
-        return loans;
+    public Long getLoanId() {
+        return loanId;
     }
 
-    public void setLoans(Loan loans) {
-        this.loans = loans;
+    public void setLoanId(Long loanId) {
+        this.loanId = loanId;
     }
 
-    public Client getClient() {
-        return client;
+    public String getName() {
+        return name;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setName(String name) {
+        this.name = name;
     }
 }
