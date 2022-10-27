@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.models;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ public class ClientLoan {
     private double amount;
     private int payments;
     /*trae todo, lazy segun la demanda */
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
@@ -27,7 +29,11 @@ public class ClientLoan {
 
     public ClientLoan(Loan loan, double amount, int payments, Client client) {
         this.amount = amount;
-        this.payments = payments;
+        if(loan.getPayments().contains(payments)){
+            this.payments = payments;
+        } else{
+            this.payments=loan.getPayments().get(0);
+        }
         this.client = client;
         this.loan = loan;
     }

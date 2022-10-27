@@ -1,5 +1,6 @@
 package com.mindhub.homebanking;
 
+import com.mindhub.homebanking.dtos.Card;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
@@ -7,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +21,12 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardReposiroty cardReposiroty){
 		return (args) -> {
-			Client cliente = new Client("Pedro", "Sanchez", "pedro@pedro.com");
-			clientRepository.save(cliente);
-			Client cliente1 = new Client("Melba", "Morel", "melba@mindhub.com");
+			Client cliente1 = new Client("Pedro", "Sanchez", "pedro@pedro.com");
 			clientRepository.save(cliente1);
+			Client cliente = new Client("Melba", "Morel", "melba@mindhub.com");
+			clientRepository.save(cliente);
 
 			Account account1 = new Account("VIN001", LocalDateTime.now() ,5000.00,cliente1);
 			accountRepository.save(account1);
@@ -91,6 +93,13 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan3);
 			ClientLoan clientLoan4 = new ClientLoan(loan3,200000,36,cliente);
 			clientLoanRepository.save(clientLoan4);
+
+			Card card1 = new Card("4073898587466547", CardColor.GOLD,CardType.DEBIT, LocalDate.now(),cliente);
+			cardReposiroty.save(card1);
+			Card card2 = new Card("5473898587466547", CardColor.TITANIUM,CardType.CREDIT,LocalDate.now(),cliente);
+			cardReposiroty.save(card2);
+			Card card3 = new Card("4573898587466547", CardColor.SILVER,CardType.CREDIT,LocalDate.now(),cliente1);
+			cardReposiroty.save(card3);
 		};
 	}
 }

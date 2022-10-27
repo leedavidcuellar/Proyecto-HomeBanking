@@ -1,4 +1,5 @@
 package com.mindhub.homebanking.models;
+import com.mindhub.homebanking.dtos.Card;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.HashSet;
@@ -24,6 +25,9 @@ public class Client {
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<ClientLoan> loans = new HashSet<>();
 
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    private Set<Card> cards = new HashSet<>();
+
     public Client() {
     }
 
@@ -31,6 +35,14 @@ public class Client {
         this.firstName = firstName;
         this.lastName = lastName;
         this.mail = mail;
+    }
+
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
     }
 
     public Long getId() {
