@@ -21,12 +21,12 @@ public class LoanController {
     private LoanRepository loanRepository;
 
     @GetMapping("/loans")
-    public List<Loan> getAccounts(){
+    public List<Loan> getLoans(){
         return loanRepository.findAll();
     }
 
     @GetMapping("/loans/{id}")
-    public LoanDTO getAccount(@PathVariable Long id){
+    public LoanDTO getLoan(@PathVariable Long id){
         return loanRepository.findById(id).map(LoanDTO::new).orElse(null);
     }
 }

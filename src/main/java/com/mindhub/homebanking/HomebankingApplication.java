@@ -1,10 +1,7 @@
 package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.models.*;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.LoanRepository;
-import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,7 +19,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
 		return (args) -> {
 			Client cliente = new Client("Pedro", "Sanchez", "pedro@pedro.com");
 			clientRepository.save(cliente);
@@ -40,8 +37,8 @@ public class HomebankingApplication {
 
 			Transaction transaction1 = new Transaction(1500.00,"aB", LocalDateTime.now(),account1, TransactionType.CREDIT);
 			Transaction transaction2 = new Transaction(500.00,"aB1", LocalDateTime.now().plusDays(1),account1, TransactionType.CREDIT);
-			Transaction transaction3 = new Transaction(-500.00,"aBc", LocalDateTime.now().plusDays(2),account1, TransactionType.DEBIT);
-			Transaction transaction4 = new Transaction(-2000.00,"aBc1", LocalDateTime.now().plusDays(3),account1, TransactionType.DEBIT);
+			Transaction transaction3 = new Transaction(-500.00,"aBc", LocalDateTime.now(),account1, TransactionType.DEBIT);
+			Transaction transaction4 = new Transaction(-2000.00,"aBc1", LocalDateTime.now(),account1, TransactionType.DEBIT);
 			transactionRepository.save(transaction1);
 			transactionRepository.save(transaction2);
 			transactionRepository.save(transaction3);
@@ -49,8 +46,8 @@ public class HomebankingApplication {
 
 			Transaction transaction5 = new Transaction(3000.00,"Ba", LocalDateTime.now(),account2, TransactionType.CREDIT);
 			Transaction transaction6 = new Transaction(1000.00,"Ba1", LocalDateTime.now().plusDays(1),account2, TransactionType.CREDIT);
-			Transaction transaction7 = new Transaction(-1000.00,"Bca", LocalDateTime.now().plusDays(2),account2, TransactionType.DEBIT);
-			Transaction transaction8 = new Transaction(-1000.00,"Bca1", LocalDateTime.now().plusDays(3),account2, TransactionType.DEBIT);
+			Transaction transaction7 = new Transaction(-1000.00,"Bca", LocalDateTime.now(),account2, TransactionType.DEBIT);
+			Transaction transaction8 = new Transaction(-1000.00,"Bca1", LocalDateTime.now(),account2, TransactionType.DEBIT);
 			transactionRepository.save(transaction5);
 			transactionRepository.save(transaction6);
 			transactionRepository.save(transaction7);
@@ -58,8 +55,8 @@ public class HomebankingApplication {
 
 			Transaction transaction9 = new Transaction(4000.00,"Cd", LocalDateTime.now(),account3, TransactionType.CREDIT);
 			Transaction transaction10 = new Transaction(1000.00,"Cd1", LocalDateTime.now().plusDays(1),account3, TransactionType.CREDIT);
-			Transaction transaction11 = new Transaction(-1000.00,"Cde", LocalDateTime.now().plusDays(2),account3, TransactionType.DEBIT);
-			Transaction transaction12 = new Transaction(-1000.00,"Cde1", LocalDateTime.now().plusDays(3),account3, TransactionType.DEBIT);
+			Transaction transaction11 = new Transaction(-1000.00,"Cde", LocalDateTime.now(),account3, TransactionType.DEBIT);
+			Transaction transaction12 = new Transaction(-1000.00,"Cde1", LocalDateTime.now(),account3, TransactionType.DEBIT);
 			transactionRepository.save(transaction9);
 			transactionRepository.save(transaction10);
 			transactionRepository.save(transaction11);
@@ -87,9 +84,13 @@ public class HomebankingApplication {
 			loanRepository.save(loan3);
 
 			ClientLoan clientLoan1 = new ClientLoan(loan1,400000,60,cliente1);
+			clientLoanRepository.save(clientLoan1);
 			ClientLoan clientLoan2 = new ClientLoan(loan2,50000,12,cliente1);
+			clientLoanRepository.save(clientLoan2);
 			ClientLoan clientLoan3 = new ClientLoan(loan2,100000,24,cliente);
+			clientLoanRepository.save(clientLoan3);
 			ClientLoan clientLoan4 = new ClientLoan(loan3,200000,36,cliente);
+			clientLoanRepository.save(clientLoan4);
 		};
 	}
 }

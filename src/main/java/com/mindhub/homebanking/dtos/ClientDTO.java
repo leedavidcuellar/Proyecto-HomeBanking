@@ -11,16 +11,9 @@ public class ClientDTO {
     private String firstName;
     private String lastName;
     private String mail;
-    private Set<AccountDTO> accounts = new HashSet<>();
+    private Set<AccountDTO> accounts;
 
-    private Set<ClientLoanDTO> loans = new HashSet<>();//son lcientloan
-
-    public ClientDTO(Long id, String firstName, String lastName, String mail) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.mail = mail;
-    }
+    private Set<ClientLoanDTO> loans;//son los client que sacan prestamos
 
     public ClientDTO(Client client) {
         this.id = client.getId();
@@ -76,5 +69,13 @@ public class ClientDTO {
 
     public void setAccounts(Set<AccountDTO> accounts) {
         this.accounts = accounts;
+    }
+
+    public Set<ClientLoanDTO> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(Set<ClientLoanDTO> loans) {
+        this.loans = loans;
     }
 }

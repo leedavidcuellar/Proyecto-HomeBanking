@@ -1,9 +1,6 @@
 package com.mindhub.homebanking.dtos;
 
-import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.models.ClientLoan;
-import com.mindhub.homebanking.models.Loan;
 
 public class ClientLoanDTO {
 
@@ -14,14 +11,6 @@ public class ClientLoanDTO {
     private String name;
 
     public ClientLoanDTO() {
-    }
-
-    public ClientLoanDTO(Long id, double amount, int payments, String name, Long loanId) {
-        this.id = id;
-        this.amount = amount;
-        this.payments = payments;
-        this.loanId = loanId;
-        this.name = name;
     }
 
     public ClientLoanDTO(ClientLoan clientLoan){

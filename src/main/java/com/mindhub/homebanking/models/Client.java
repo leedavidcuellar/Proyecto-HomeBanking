@@ -19,10 +19,10 @@ public class Client {
     private String mail;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private Set<Account> account = new HashSet<>();
+    private Set<Account> account;
 
-    @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER)
-    private Set<Loan> loans = new HashSet<>();
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    private Set<ClientLoan> loans = new HashSet<>();
 
     public Client() {
     }
@@ -73,11 +73,11 @@ public class Client {
         this.account = account;
     }
 
-    public Set<Loan> getLoans() {
+    public Set<ClientLoan> getLoans() {
         return loans;
     }
 
-    public void setLoans(Set<Loan> loans) {
+    public void setLoans(Set<ClientLoan> loans) {
         this.loans = loans;
     }
 

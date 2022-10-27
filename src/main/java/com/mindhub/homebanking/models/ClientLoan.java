@@ -13,7 +13,7 @@ public class ClientLoan {
 
     private double amount;
     private int payments;
-    /* trae todo, lazy segun la demanda */
+    /*trae todo, lazy segun la demanda */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
