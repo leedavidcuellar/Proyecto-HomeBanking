@@ -1,4 +1,4 @@
-package com.mindhub.homebanking.dtos;
+package com.mindhub.homebanking.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mindhub.homebanking.models.CardColor;
@@ -36,6 +36,11 @@ public class Card {
     @JoinColumn(name = "client_id")
     private Client client;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "bank_id")
+    private Bank bank;
+
     public Card() {
     }
 
@@ -56,6 +61,27 @@ public class Card {
 
         this.cvv = generateCVV();
     }
+
+    //extra ejercicio
+    public Card(CardColor color, CardType type, LocalDate fromDate, Client client, Bank bank) {
+        this.color = color;
+        this.type = type;
+        this.fromDate = fromDate;
+        this.client = client;
+        this.bank = bank;
+        this.cvv = generateCvv1();
+        this.number = generateNumber();
+        this.thruDate = LocalDate.now().plusYears(bank.getCardGoodThru());
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
     public Long getId() {
         return id;
     }
@@ -132,7 +158,28 @@ public class Card {
         Random aleatorio = new Random();
         return String.valueOf(aleatorio.nextInt(100,999));
     }
+
+    //Generador de CVV
+    public String generateCvv1() {
+        String newCvv = "";
+        for(int i = 0; i < 3; i++) {
+            int newNumber = (int) (Math.random() * 10);
+            newCvv += String.valueOf(newNumber);
+        }
+        return newCvv;
+    }
+
+    public String generateNumber(){
+        String generateNumber = "";
+        for(int i = 0; i < 12; i++) {
+            int newNumber = (int) (Math.random() * 10);
+            generateNumber += String.valueOf(newNumber);
+        }
+        return this.bank.getCardHeader()+generateNumber;
+    }
 }
+
+
 
 /*
  private String generateCVC(){

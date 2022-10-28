@@ -1,5 +1,4 @@
 package com.mindhub.homebanking.models;
-import com.mindhub.homebanking.dtos.Card;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.HashSet;

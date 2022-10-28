@@ -1,6 +1,6 @@
 package com.mindhub.homebanking;
 
-import com.mindhub.homebanking.dtos.Card;
+import com.mindhub.homebanking.models.Card;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -21,7 +20,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardReposiroty cardReposiroty){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardReposiroty cardReposiroty, BankRepository bankRepository){
 		return (args) -> {
 			Client cliente1 = new Client("Pedro", "Sanchez", "pedro@pedro.com");
 			clientRepository.save(cliente1);
@@ -102,6 +101,12 @@ public class HomebankingApplication {
 			cardReposiroty.save(card3);
 			Card card4 = new Card("4071-8985-4867-5432", CardColor.GOLD,CardType.DEBIT,LocalDate.now(),cliente1);
 			cardReposiroty.save(card4);
+
+			//extra probar
+			Bank bank = new Bank("Nacion","5524",Long.valueOf(4));
+			bankRepository.save(bank);
+			Card card5 = new Card(CardColor.GOLD,CardType.CREDIT,LocalDate.now(),cliente,bank);
+			cardReposiroty.save(card5);
 		};
 	}
 }

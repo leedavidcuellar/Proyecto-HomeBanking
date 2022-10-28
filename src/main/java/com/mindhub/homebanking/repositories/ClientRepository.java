@@ -14,4 +14,5 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
     Client findByFirstNameAndLastNameIgnoreCase(String firstname,String lastName);
     
     List<Client> findByFirstNameIgnoreCaseOrderByLastNameAsc(String firstName);
+
 }//con el nombre de las variables al lado del findby, lo busca sin hacer query y ignorecase, no importa mayuscula o minuscula

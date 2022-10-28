@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.dtos;
 
+import com.mindhub.homebanking.models.Card;
 import com.mindhub.homebanking.models.CardColor;
 import com.mindhub.homebanking.models.CardType;
 
@@ -89,11 +90,11 @@ public class CardDTO {
         this.cvv = cvc;
     }
 
-    public String getCardholder() {
+    public String getCardHolder() {
         return this.cardHolder;
     }
 
-    public void setCardholder(String cardholder) {
-        this.cardHolder = cardholder;
+    public void setCardHolder(String cardHolder) {
+        this.cardHolder = cardHolder;
     }
 }
