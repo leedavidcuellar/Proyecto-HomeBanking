@@ -19,8 +19,6 @@ public class CardDTO {
     private String cvv;
     private String cardHolder;
 
-
-
     public CardDTO() {
     }
 
@@ -32,7 +30,7 @@ public class CardDTO {
         this.fromDate = card.getFromDate();
         this.thruDate = card.getThruDate();
         this.cvv = card.getCvv();
-        this.cardHolder = card.getCardholder();
+        this.cardHolder = card.getCardHolder();
     }
 
     public Long getId() {
@@ -84,7 +82,7 @@ public class CardDTO {
     }
 
     public String getCvv() {
-        return cvv;
+        return this.cvv;
     }
 
     public void setCvv(String cvc) {
@@ -92,7 +90,7 @@ public class CardDTO {
     }
 
     public String getCardholder() {
-        return cardHolder;
+        return this.cardHolder;
     }
 
     public void setCardholder(String cardholder) {

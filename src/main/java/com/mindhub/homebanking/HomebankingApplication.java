@@ -94,12 +94,14 @@ public class HomebankingApplication {
 			ClientLoan clientLoan4 = new ClientLoan(loan3,200000,36,cliente);
 			clientLoanRepository.save(clientLoan4);
 
-			Card card1 = new Card("4073898587466547", CardColor.GOLD,CardType.DEBIT, LocalDate.now(),cliente);
+			Card card1 = new Card("4073-8985-8746-1567", CardColor.GOLD,CardType.DEBIT, LocalDate.now(),cliente);
 			cardReposiroty.save(card1);
-			Card card2 = new Card("5473898587466547", CardColor.TITANIUM,CardType.CREDIT,LocalDate.now(),cliente);
+			Card card2 = new Card("5473-8985-7846-4765", CardColor.TITANIUM,CardType.CREDIT,LocalDate.now(),cliente);
 			cardReposiroty.save(card2);
-			Card card3 = new Card("4573898587466547", CardColor.SILVER,CardType.CREDIT,LocalDate.now(),cliente1);
+			Card card3 = new Card("4573-8985-4687-2543", CardColor.SILVER,CardType.CREDIT,LocalDate.now(),cliente1);
 			cardReposiroty.save(card3);
+			Card card4 = new Card("4071-8985-4867-5432", CardColor.GOLD,CardType.DEBIT,LocalDate.now(),cliente1);
+			cardReposiroty.save(card4);
 		};
 	}
 }
