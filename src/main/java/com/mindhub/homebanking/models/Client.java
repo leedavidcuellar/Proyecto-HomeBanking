@@ -16,7 +16,9 @@ public class Client {
     private Long id;
     private String firstName;
     private String lastName;
-    private String mail;
+    private String email;
+
+    private String password;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Account> account;
@@ -30,10 +32,11 @@ public class Client {
     public Client() {
     }
 
-    public Client(String firstName, String lastName, String mail) {
+    public Client(String firstName, String lastName, String mail, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.mail = mail;
+        this.email = mail;
+        this.password = password;
     }
 
     public Set<Card> getCards() {
@@ -68,12 +71,12 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Set<Account> getAccount() {
@@ -92,13 +95,21 @@ public class Client {
         this.loans = loans;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", mail='" + mail + '\'' +
+                ", mail='" + email + '\'' +
                 ", account=" + account +
                 '}';
     }

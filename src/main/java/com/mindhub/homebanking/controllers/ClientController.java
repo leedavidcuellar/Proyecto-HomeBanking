@@ -39,4 +39,8 @@ public class ClientController {
         return clientRepository.findByLastNameIgnoreCase(firstName).stream().map(ClientDTO::new).collect(Collectors.toList());
     }
 
+    @GetMapping("/clients/email/{email}")
+    public ClientDTO getClientsByEmail(@PathVariable String email){
+        return clientRepository.findByEmail(email).map(ClientDTO::new).orElse(null);
+    }
 }

@@ -10,7 +10,7 @@ public class ClientDTO {
     private Long id;
     private String firstName;
     private String lastName;
-    private String mail;
+    private String email;
     private Set<AccountDTO> accounts;
 
     private Set<ClientLoanDTO> loans;//son los client que sacan prestamos
@@ -21,7 +21,7 @@ public class ClientDTO {
         this.id = client.getId();
         this.firstName = client.getFirstName();
         this.lastName = client.getLastName();
-        this.mail = client.getMail();
+        this.email = client.getEmail();
         this.accounts = client.getAccount()
                 .stream()
                 .map(AccountDTO::new)
@@ -68,12 +68,12 @@ public class ClientDTO {
         this.lastName = lastName;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String mail) {
+        this.email = email;
     }
 
     public Set<AccountDTO> getAccounts() {
