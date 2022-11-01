@@ -23,9 +23,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-
     }
 
     @Override
@@ -35,16 +33,17 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
 
             Optional<Client> client =  clientRepository.findByEmail(inputName);
 
-            if (client != null) {
-
-                return new User(client.get().getEmail(), client.get().getPassword(),
-
-                        AuthorityUtils.createAuthorityList("USER"));
-
+            if (client.isPresent()) {
+                if(client.get().getEmail().equals("admin@admin.com")) {//&& client.get().getPassword().equals("1234")
+                    return new User(client.get().getEmail(), client.get().getPassword(),
+                            AuthorityUtils.createAuthorityList("ADMIN"));
+                }
+                else {
+                    return new User(client.get().getEmail(), client.get().getPassword(),
+                            AuthorityUtils.createAuthorityList("CLIENT"));
+                }
             } else {
-
                 throw new UsernameNotFoundException("Unknown user: " + inputName);
-
             }
 
         });
