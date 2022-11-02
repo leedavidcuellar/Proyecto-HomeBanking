@@ -1,14 +1,18 @@
 package com.mindhub.homebanking.models;
 import javax.persistence.Entity;
+
+import com.mindhub.homebanking.repositories.AccountRepository;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 public class Account {
@@ -38,6 +42,13 @@ public class Account {
         this.number = number;
         this.creationDate = creationDate;
         this.balance = balance;
+        this.client = cliente;
+    }
+
+    public Account(Client cliente) {
+        this.number = generateNumber();
+        this.creationDate = LocalDateTime.now();
+        this.balance = 0.00;
         this.client = cliente;
     }
 
@@ -113,6 +124,20 @@ public class Account {
                 break;
         }
         setBalance(total);
+    }
+
+    private String generateNumber(){
+        Random aleatorio = new Random();
+        String aux = "";
+        int num = aleatorio.nextInt(0, 999);
+        if (num < 10) {
+            return aux = "VIN00" + num;
+        }
+        if (num < 100) {
+            return aux = "VIN0" + num;
+        }
+        return aux = "VIN" + num;
+
     }
 
     /*

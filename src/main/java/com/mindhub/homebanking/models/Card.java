@@ -74,6 +74,16 @@ public class Card {
         this.thruDate = LocalDate.now().plusYears(bank.getCardGoodThru());
     }
 
+    public Card(CardColor color, CardType type, Client client) {
+        this.color = color;
+        this.type = type;
+        this.fromDate = LocalDate.now();
+        this.client = client;
+        this.cvv = generateCvv1();
+        this.number = generateNumber2();
+        this.thruDate = LocalDate.now().plusYears(5);
+    }
+
     public Bank getBank() {
         return bank;
     }
@@ -176,6 +186,15 @@ public class Card {
             generateNumber += String.valueOf(newNumber);
         }
         return this.bank.getCardHeader()+generateNumber;
+    }
+
+    public String generateNumber2(){
+        String generateNumber = "";
+        for(int i = 0; i < 16; i++) {
+            int newNumber = (int) (Math.random() * 10);
+            generateNumber += String.valueOf(newNumber);
+        }
+        return generateNumber;
     }
 }
 

@@ -7,7 +7,7 @@ var app = new Vue({
     },
     methods:{
         getData: function(){
-            axios.get("/api/clients/1")
+            axios.get("/api/clients/current")
             .then((response) => {
                 //get client ifo
                 this.clientInfo = response.data;
@@ -21,8 +21,16 @@ var app = new Vue({
         formatDate: function(date){
             return new Date(date).toLocaleDateString('en-gb');
         },
+        signOut: function(){
+            axios.post('/api/logout')
+            .then(response => window.location.href="/web/index.html")
+            .catch(() =>{
+                this.errorMsg = "Sign out failed"
+                this.errorToats.show();
+            })
+        },
         create: function(){
-            axios.post('http://localhost:8080/api/clients/1/accounts')
+            axios.post('http://localhost:8080/api/clients/current/accounts')
             .then(response => window.location.reload())
             .catch((error) =>{
                 this.errorMsg = error.response.data;
