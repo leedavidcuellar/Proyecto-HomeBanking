@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
+import utils.CardUtils;
 
 @Entity
 public class Account {
@@ -46,7 +47,7 @@ public class Account {
     }
 
     public Account(Client cliente) {
-        this.number = generateNumber();
+        this.number = CardUtils.generateNumber();
         this.creationDate = LocalDateTime.now();
         this.balance = 0.00;
         this.client = cliente;
@@ -126,31 +127,6 @@ public class Account {
         setBalance(total);
     }
 
-    private String generateNumber(){
-        Random aleatorio = new Random();
-        String aux = "";
-        int num = aleatorio.nextInt(0, 999);
-        if (num < 10) {
-            return aux = "VIN00" + num;
-        }
-        if (num < 100) {
-            return aux = "VIN0" + num;
-        }
-        return aux = "VIN" + num;
 
-    }
 
-    /*
-    public double getBalance(){
-     double total =0.0;
-        for(Transaction transaction:gertTransacion()){
-            switch(transaction.getType()){
-             case DEBIT: total = total + amount;
-                    break;
-             case CREDIT: total = total + amount;
-                    break;
-            }
-        }
-    }
-    */
 }

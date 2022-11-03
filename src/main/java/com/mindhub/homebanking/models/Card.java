@@ -12,6 +12,7 @@ import java.util.Random;
 
 import com.mindhub.homebanking.models.Client;
 import org.hibernate.annotations.GenericGenerator;
+import utils.CardUtils;
 
 @Entity
 public class Card {
@@ -36,10 +37,6 @@ public class Card {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "bank_id")
-    private Bank bank;
 
     public Card() {
     }
@@ -59,19 +56,18 @@ public class Card {
 
         }
 
-        this.cvv = generateCVV();
+        this.cvv = CardUtils.generateNumberAleatorio(3);
     }
 
     //extra ejercicio
-    public Card(CardColor color, CardType type, LocalDate fromDate, Client client, Bank bank) {
+    public Card(CardColor color, CardType type, LocalDate fromDate, Client client) {
         this.color = color;
         this.type = type;
         this.fromDate = fromDate;
         this.client = client;
-        this.bank = bank;
-        this.cvv = generateCvv1();
-        this.number = generateNumber();
-        this.thruDate = LocalDate.now().plusYears(bank.getCardGoodThru());
+        this.cvv = CardUtils.generateNumberAleatorio(3);
+        this.number = CardUtils.generateNumberAleatorio(16);
+        this.thruDate = LocalDate.now().plusYears(5);
     }
 
     public Card(CardColor color, CardType type, Client client) {
@@ -79,17 +75,9 @@ public class Card {
         this.type = type;
         this.fromDate = LocalDate.now();
         this.client = client;
-        this.cvv = generateCvv1();
-        this.number = generateNumber2();
+        this.cvv = CardUtils.generateNumberAleatorio(3);
+        this.number = "4545"+ CardUtils.generateNumberAleatorio(12);
         this.thruDate = LocalDate.now().plusYears(5);
-    }
-
-    public Bank getBank() {
-        return bank;
-    }
-
-    public void setBank(Bank bank) {
-        this.bank = bank;
     }
 
     public Long getId() {
@@ -164,51 +152,8 @@ public class Card {
         this.client = client;
     }
 
-    private String generateCVV(){
-        Random aleatorio = new Random();
-        return String.valueOf(aleatorio.nextInt(100,999));
-    }
 
-    //Generador de CVV
-    public String generateCvv1() {
-        String newCvv = "";
-        for(int i = 0; i < 3; i++) {
-            int newNumber = (int) (Math.random() * 10);
-            newCvv += String.valueOf(newNumber);
-        }
-        return newCvv;
-    }
-
-    public String generateNumber(){
-        String generateNumber = "";
-        for(int i = 0; i < 12; i++) {
-            int newNumber = (int) (Math.random() * 10);
-            generateNumber += String.valueOf(newNumber);
-        }
-        return this.bank.getCardHeader()+generateNumber;
-    }
-
-    public String generateNumber2(){
-        String generateNumber = "";
-        for(int i = 0; i < 16; i++) {
-            int newNumber = (int) (Math.random() * 10);
-            generateNumber += String.valueOf(newNumber);
-        }
-        return generateNumber;
-    }
 }
 
 
 
-/*
- private String generateCVC(){
-        int newCVC = (int) (Math.random() * (999 - 100)+100);
-        if(newCVC<10){
-            return "00"+ String.valueOf(newCVC);
-        }
-        if(newCVC<100){
-            return "0"+ String.valueOf(newCVC);
-        }
-        return String.valueOf(newCVC);
-    }
- */

@@ -25,7 +25,7 @@ public class HomebankingApplication {
 	PasswordEncoder passwordEncoder;
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardReposiroty cardReposiroty, BankRepository bankRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardReposiroty cardReposiroty){
 		return (args) -> {
 			Client cliente1 = new Client("Pedro", "Sanchez", "pedro@pedro.com",passwordEncoder.encode("1234"));
 			clientRepository.save(cliente1);
@@ -42,6 +42,9 @@ public class HomebankingApplication {
 			accountRepository.save(account3);
 			Account account4 = new Account("VIN004", LocalDateTime.now() ,7000.00,cliente);
 			accountRepository.save(account4);
+			Account account5 = new Account(cliente);
+			accountRepository.save(account5);
+
 
 			Transaction transaction1 = new Transaction(1500.00,"aB", LocalDateTime.now(),account1, TransactionType.CREDIT);
 			Transaction transaction2 = new Transaction(500.00,"aB1", LocalDateTime.now().plusDays(1),account1, TransactionType.CREDIT);
@@ -109,11 +112,6 @@ public class HomebankingApplication {
 			Card card4 = new Card("4071-8985-4867-5432", CardColor.GOLD,CardType.DEBIT,LocalDate.now(),cliente1);
 			cardReposiroty.save(card4);
 
-			//extra probar
-			Bank bank = new Bank("Nacion","5524",Long.valueOf(4));
-			bankRepository.save(bank);
-			Card card5 = new Card(CardColor.GOLD,CardType.CREDIT,LocalDate.now(),cliente,bank);
-			cardReposiroty.save(card5);
 		};
 	}
 }
