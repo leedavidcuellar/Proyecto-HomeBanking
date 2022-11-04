@@ -76,7 +76,7 @@ public class Card {
         this.fromDate = LocalDate.now();
         this.client = client;
         this.cvv = CardUtils.generateNumberAleatorio(3);
-        this.number = "4545"+ CardUtils.generateNumberAleatorio(12);
+        this.number = CardUtils.generateNumberAleatorio(4) +"-"+ CardUtils.generateNumberAleatorio(4) +"-"+ CardUtils.generateNumberAleatorio(4);
         this.thruDate = LocalDate.now().plusYears(5);
     }
 

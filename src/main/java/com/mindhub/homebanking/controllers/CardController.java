@@ -84,7 +84,7 @@ public class CardController {
         if (optionalClient.isPresent()) {
             if (optionalClient.get().getCards().stream().filter(card -> card.getType() == cardType).count() < 3) {
                 cardReposiroty.save(new Card(cardColor, cardType, optionalClient.get()));
-                return new ResponseEntity<>(HttpStatus.CREATED);
+                return new ResponseEntity<>("Card created success 201",HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>("You already have 3 " + cardType + " cards", HttpStatus.FORBIDDEN);
             }

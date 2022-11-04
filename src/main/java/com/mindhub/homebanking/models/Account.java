@@ -47,7 +47,7 @@ public class Account {
     }
 
     public Account(Client cliente) {
-        this.number = CardUtils.generateNumber();
+        this.number = "VIN - "+CardUtils.generateNumberAleatorio(8);
         this.creationDate = LocalDateTime.now();
         this.balance = 0.00;
         this.client = cliente;

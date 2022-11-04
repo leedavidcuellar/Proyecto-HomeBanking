@@ -6,13 +6,12 @@ import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import utils.CardUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -74,14 +73,7 @@ public class ClientController {
             Random aleatorio = new Random();
             String aux = "";
             do {
-                int num = aleatorio.nextInt(0, 999);
-                if (num < 10) {
-                    aux = "VIN00" + num;
-                }
-                if (num < 100) {
-                    aux = "VIN0" + num;
-                }
-                aux = "VIN" + num;
+                aux = "VIN - " + CardUtils.generateNumberAleatorio(8);
             } while (accountRepository.findByNumber(aux).isPresent());
             //genero una cuenta
             accountRepository.save(new Account(aux, LocalDateTime.now(), 0.00, client));
@@ -98,18 +90,22 @@ public class ClientController {
        try {
            Optional<Client> optionalClient = clientRepository.findById(clientId);
            if (optionalClient.isPresent()) {
-               Account account = new Account(optionalClient.get());
-               accountRepository.save(account);
-               return new ResponseEntity<>(HttpStatus.CREATED);
+               Account account;
+               do {
+                    account = new Account(optionalClient.get());
+               }while(accountRepository.findByNumber(account.getNumber()).isPresent());
+                    accountRepository.save(account);
+                   return new ResponseEntity<>(HttpStatus.CREATED);
            } else {
                return new ResponseEntity<>("Cliente no exists", HttpStatus.FORBIDDEN);
            }
        }catch (Exception ex) {
             ex.printStackTrace();
             return new ResponseEntity<>("Unexpected error", HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
     }
+
+
     @GetMapping("/clients/current")
     public ClientDTO getClient(Authentication authentication){
     Client client = clientRepository.findByEmail(authentication.getName()).get();

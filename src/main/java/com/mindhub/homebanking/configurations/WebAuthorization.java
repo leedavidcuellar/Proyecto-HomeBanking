@@ -30,6 +30,8 @@ public class WebAuthorization{
         http.authorizeRequests()
                 .antMatchers("/web/index.html", "/web/css/**", "/web/img/**", "/web/js/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/login", "/api/clients").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST, "/api/clients/current/cards").hasAuthority("CLIENT")
                 .antMatchers("/**").hasAuthority("CLIENT");
 
 
