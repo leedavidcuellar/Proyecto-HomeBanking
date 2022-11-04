@@ -89,7 +89,7 @@ public class CardController {
                 return new ResponseEntity<>("You already have 3 " + cardType + " cards", HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>("Cliente no exists", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Client no exists", HttpStatus.FORBIDDEN);
         }
     }
 }
