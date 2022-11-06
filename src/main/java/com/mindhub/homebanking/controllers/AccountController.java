@@ -6,11 +6,15 @@ import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,6 +49,7 @@ public class AccountController {
     }
 
     //otra forma mas optima porque reduce tiempo ejecucion porque es especifico primero filtra y despues trae cuentas
+    //-Buscar una lista de cuentas en el cual su balance se mayor a x monto pasado por parametro
     @GetMapping("/accounts/greatThanMount/{importe}")
     public List<AccountDTO> getAccountsGreatThanV(@PathVariable double importe){
         return accountRepository.findByBalanceGreaterThan(importe)
@@ -74,4 +79,24 @@ public class AccountController {
 
         }
     }
+
+    // -Buscar una lista de cuentas por en la cual sue fecha se menor a la que le pasemos por parametro
+    @GetMapping("/accounts/CreationDateLessThan/{date}")
+    public List<AccountDTO> getByCreationDateLessThan(@PathVariable String date){//
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        System.out.println(LocalDateTime.parse(date, formatter));
+        return accountRepository.findByCreationDateLessThan(LocalDateTime.parse(date, formatter))
+                .stream()
+                .map(account -> new AccountDTO(account.get()))
+                .collect(Collectors.toList());
+    }
+
+    // -Buscar una cuenta por Numero de cuenta
+    @GetMapping("/accounts/byNumber/{number}")
+    public AccountDTO getAccount(@PathVariable String number) {
+        return accountRepository.findByNumber(number).map(AccountDTO::new).orElse(null);
+    }
+
+
 }

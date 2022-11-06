@@ -41,14 +41,15 @@ public class ClientController {
             return clientRepository.findById(id).map(ClientDTO::new).orElse(null);
     }
 
-    @GetMapping("/clients/lastNam/{lastName}")
+    @GetMapping("/clients/lastName/{lastName}")
     public ClientDTO getClientByLastName(@PathVariable String lastName){
         return clientRepository.findByLastNameIgnoreCase(lastName).map(ClientDTO::new).orElse(null);
     }
 
     @GetMapping("/clients/firstName/{firstName}") //como es lista no usamos orelse null porque se usa stream
     public List<ClientDTO> getClientsByFirstName(@PathVariable String firstName){
-        return clientRepository.findByLastNameIgnoreCase(firstName).stream().map(ClientDTO::new).collect(Collectors.toList());
+        return clientRepository.findByFirstNameIgnoreCase(firstName)
+                .stream().map(client -> new ClientDTO(client.get())).collect(Collectors.toList());
     }
 
     @GetMapping("/clients/email/{email}")
@@ -111,6 +112,14 @@ public class ClientController {
     Client client = clientRepository.findByEmail(authentication.getName()).get();
     return new ClientDTO(client);
     }
+
+    @GetMapping("/clients/firstNameEmail") //-Buscar un cliente por Nombre y Email
+    public List<ClientDTO> getClientsByFirstNameAndEmail(@RequestParam String firstName, @RequestParam String email){
+        return clientRepository.findByFirstNameIgnoreCaseAndEmail(firstName,email)
+                .stream().map(ClientDTO::new).collect(Collectors.toList());
+    }
+
+
 
 }
 

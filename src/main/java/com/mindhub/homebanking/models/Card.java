@@ -65,6 +65,7 @@ public class Card {
         this.type = type;
         this.fromDate = fromDate;
         this.client = client;
+        this.cardHolder = client.getFirstName() + " " + client.getLastName();
         this.cvv = CardUtils.generateNumberAleatorio(3);
         this.number = CardUtils.generateNumberAleatorio(16);
         this.thruDate = LocalDate.now().plusYears(5);
@@ -75,8 +76,9 @@ public class Card {
         this.type = type;
         this.fromDate = LocalDate.now();
         this.client = client;
+        this.cardHolder = client.getFirstName() + " " + client.getLastName();
         this.cvv = CardUtils.generateNumberAleatorio(3);
-        this.number = CardUtils.generateNumberAleatorio(4) +"-"+ CardUtils.generateNumberAleatorio(4) +"-"+ CardUtils.generateNumberAleatorio(4);
+        this.number = CardUtils.generateNumberAleatorio(4) +"-"+ CardUtils.generateNumberAleatorio(4) +"-"+ CardUtils.generateNumberAleatorio(4)+"-"+ CardUtils.generateNumberAleatorio(4);
         this.thruDate = LocalDate.now().plusYears(5);
     }
 

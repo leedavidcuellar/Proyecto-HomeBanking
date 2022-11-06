@@ -14,8 +14,8 @@ var app = new Vue({
             event.preventDefault();
             axios.post('/api/login',`email=${this.email}&password=${this.password}`)
             .then(response => window.location.href="/web/accounts.html")
-            .catch(() =>{
-                this.errorMsg = "Sign in failed, check the information"   
+            .catch((error) =>{
+                this.errorMsg = error.response.data + " - Sign in failed, check the information";
                 this.errorToats.show();
             })
         },
@@ -23,8 +23,8 @@ var app = new Vue({
             event.preventDefault();
             axios.post('/api/clients',`firstName=${this.firstName}&lastName=${this.lastName}&email=${this.email}&password=${this.password}`)
             .then(() => { this.signIn(event) })
-            .catch(() =>{
-                this.errorMsg = "Sign up failed, check the information"
+            .catch((error) =>{
+                this.errorMsg = error.response.data + " - Sign up failed, check the information";
                 this.errorToats.show();
             })
         },
