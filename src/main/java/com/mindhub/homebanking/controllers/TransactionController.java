@@ -2,16 +2,25 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.TransactionDTO;
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.models.Transaction;
 import com.mindhub.homebanking.models.TransactionType;
+import com.mindhub.homebanking.repositories.AccountRepository;
+import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -20,6 +29,12 @@ public class TransactionController {
 
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @GetMapping("/transactions")
     public List<TransactionDTO> getTransactions(){
@@ -63,6 +78,44 @@ public class TransactionController {
                 .stream()
                 .map(transaction -> new TransactionDTO(transaction))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @PostMapping("/transactions")
+    public ResponseEntity<Object> createdTransactionBetweenAccounts(Authentication authentication, @RequestParam Double amount, @RequestParam String description,
+                                                                    @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber) {
+        if (amount == 0 || description.isEmpty() || fromAccountNumber.isEmpty() || toAccountNumber.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if (fromAccountNumber.equals(toAccountNumber)) {
+            return new ResponseEntity<>("You dont can transfer to your same account", HttpStatus.FORBIDDEN);
+        }
+        Optional<Account> sendingAccount = accountRepository.findByNumber(fromAccountNumber);
+        if (!sendingAccount.isPresent()) {
+            return new ResponseEntity<>("Origin Account no exist", HttpStatus.FORBIDDEN);
+        }
+        Optional<Client> client = clientRepository.findByEmail(sendingAccount.get().getClient().getEmail());
+        if (!client.isPresent()) {
+            return new ResponseEntity<>("You cant do this operation", HttpStatus.FORBIDDEN);
+        }
+        Optional<Account> receiverAccount = accountRepository.findByNumber(toAccountNumber);
+        if (!receiverAccount.isPresent()) {
+            return new ResponseEntity<>("the receiver account no exist, please check number", HttpStatus.FORBIDDEN);
+        }
+        if (sendingAccount.get().getBalance() < amount) {
+            return new ResponseEntity<>("You Exceded amount avaiable", HttpStatus.FORBIDDEN);
+        }
+        Transaction transaction1 = new Transaction(-(amount), description + "-" + sendingAccount.get().getNumber(), LocalDateTime.now(), sendingAccount.get(),TransactionType.DEBIT);
+        transactionRepository.save(transaction1);
+
+        Transaction transaction2 = new Transaction(amount, description + "-" + receiverAccount.get().getNumber(), LocalDateTime.now(), receiverAccount.get(),TransactionType.CREDIT);
+        transactionRepository.save(transaction2);
+        sendingAccount.get().setBalance(sendingAccount.get().getBalance() - amount);
+        receiverAccount.get().setBalance(receiverAccount.get().getBalance() + amount);
+        accountRepository.save(sendingAccount.get());
+        accountRepository.save(receiverAccount.get());
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }
