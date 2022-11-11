@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
@@ -119,7 +120,22 @@ public class ClientController {
                 .stream().map(ClientDTO::new).collect(Collectors.toList());
     }
 
+    @PostMapping("/clients/new")//genera un cliente con id directo a la basedato.
+    public ClientDTO newClient(@RequestBody Client newClient){
+        return new ClientDTO(this.clientRepository.save(newClient));
+    }
 
+    @DeleteMapping("/clients/delete/{id}")
+    public ResponseEntity<Object> deleteClient(@PathVariable Long id){
+        this.clientRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/clients/current/accounts")
+    public List<AccountDTO> getAccounts(Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName()).get();
+        return client.getAccount().stream().map(AccountDTO::new).collect(Collectors.toList());
+    }
 
 }
 
