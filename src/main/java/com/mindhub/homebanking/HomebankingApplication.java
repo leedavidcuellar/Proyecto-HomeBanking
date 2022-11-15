@@ -20,7 +20,7 @@ public class HomebankingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
-
+/*
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
@@ -113,5 +113,5 @@ public class HomebankingApplication {
 			cardReposiroty.save(card4);
 
 		};
-	}
+	}*/
 }

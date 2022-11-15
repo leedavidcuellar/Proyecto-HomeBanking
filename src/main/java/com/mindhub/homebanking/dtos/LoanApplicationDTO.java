@@ -4,17 +4,23 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.ClientLoan;
 
 public class LoanApplicationDTO {
-    private Long loanId;
+    private long loanId;
     private double amount;
     private int payments;
-    private String numberAccount;
-    private double maxAmount;
+    private String toAccountNumber;
 
-    public Long getLoanId() {
+    public LoanApplicationDTO(long loanId, double amount, int payments, String toAccountNumber){
+        this.loanId = loanId;
+        this.amount = amount;
+        this.payments = payments;
+        this.toAccountNumber = toAccountNumber;
+    }
+
+    public long getLoanId() {
         return loanId;
     }
 
-    public void setLoanId(Long loanId) {
+    public void setLoanId(long loanId) {
         this.loanId = loanId;
     }
 
@@ -34,27 +40,11 @@ public class LoanApplicationDTO {
         this.payments = payments;
     }
 
-    public String getNumberAccount() {
-        return numberAccount;
+    public String getToAccountNumber() {
+        return toAccountNumber;
     }
 
-    public void setNumberAccount(String numberAccount) {
-        this.numberAccount = numberAccount;
-    }
-
-    public double getMaxAmount() {
-        return maxAmount;
-    }
-
-    public void setMaxAmount(double maxAmount) {
-        this.maxAmount = maxAmount;
-    }
-
-    public LoanApplicationDTO(ClientLoan clientLoan, Account account){
-        this.loanId = clientLoan.getLoan().getId();
-        this.amount = clientLoan.getAmount();
-        this.payments = clientLoan.getPayments();
-        this.numberAccount = account.getNumber();
-        this.maxAmount = clientLoan.getLoan().getMaxAmount();
+    public void setToAccountNumber(String toAccountNumber) {
+        this.toAccountNumber = toAccountNumber;
     }
 }

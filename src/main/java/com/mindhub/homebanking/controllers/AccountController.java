@@ -42,7 +42,7 @@ public class AccountController {
         return accountRepository.findById(id).map(AccountDTO::new).orElse(null);
     }
 
-    @GetMapping("/clients/current/accounts")
+    @GetMapping("/clients/current/accounts1")
     public List<AccountDTO> getAccounts(Authentication authentication) {
         Optional<Client> optionalClient = clientRepository.findByEmail(authentication.getName());
         if (optionalClient.isPresent()) {

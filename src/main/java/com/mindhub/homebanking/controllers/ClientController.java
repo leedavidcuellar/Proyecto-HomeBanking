@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import utils.CardUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -136,7 +137,6 @@ public class ClientController {
         Client client = clientRepository.findByEmail(authentication.getName()).get();
         return client.getAccount().stream().map(AccountDTO::new).collect(Collectors.toList());
     }
-
 }
 
 /*

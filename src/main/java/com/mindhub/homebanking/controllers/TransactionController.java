@@ -9,11 +9,11 @@ import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.transaction.annotation.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -105,13 +105,16 @@ public class TransactionController {
         if (sendingAccount.get().getBalance() < amount) {
             return new ResponseEntity<>("You Exceded amount avaiable", HttpStatus.FORBIDDEN);
         }
+
+       // sendingAccount.get().setBalance(sendingAccount.get().getBalance() - amount);
+       // receiverAccount.get().setBalance(receiverAccount.get().getBalance() + amount);
+
         Transaction transaction1 = new Transaction(-(amount), description + "-" + sendingAccount.get().getNumber(), LocalDateTime.now(), sendingAccount.get(),TransactionType.DEBIT);
         transactionRepository.save(transaction1);
 
         Transaction transaction2 = new Transaction(amount, description + "-" + receiverAccount.get().getNumber(), LocalDateTime.now(), receiverAccount.get(),TransactionType.CREDIT);
         transactionRepository.save(transaction2);
-        sendingAccount.get().setBalance(sendingAccount.get().getBalance() - amount);
-        receiverAccount.get().setBalance(receiverAccount.get().getBalance() + amount);
+
         accountRepository.save(sendingAccount.get());
         accountRepository.save(receiverAccount.get());
 
