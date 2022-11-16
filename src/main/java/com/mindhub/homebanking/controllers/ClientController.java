@@ -122,7 +122,11 @@ public class ClientController {
     }
 
     @PostMapping("/clients/new")//genera un cliente con id directo a la basedato.
-    public ClientDTO newClient(@RequestBody Client newClient){
+    public ClientDTO newClient(@RequestBody Client newClient) {
+        /*if(clientRepository.findByEmail(newClient.getEmail()).isPresent()){ //corroboro que no haya mail repetido
+            throw new Exception("The Client exists");
+        }*/
+
         return new ClientDTO(this.clientRepository.save(newClient));
     }
 
