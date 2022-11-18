@@ -1,21 +1,24 @@
 package com.mindhub.homebanking.controllers;
 
-import com.mindhub.homebanking.models.Card;
+import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.dtos.CardDTO;
-import com.mindhub.homebanking.models.CardColor;
-import com.mindhub.homebanking.models.CardType;
-import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.CardReposiroty;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +29,12 @@ public class CardController {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @GetMapping("/cards")
     public List<Card> getCards() {
@@ -91,6 +100,44 @@ public class CardController {
         } else {
             return new ResponseEntity<>("Client no exists", HttpStatus.FORBIDDEN);
         }
+    }
+
+    @Transactional
+    @PostMapping("/cardOperation")
+    public ResponseEntity<Object> createCardOperation(@RequestBody com.minduhub.homebanking.dtos.CardOperationDTO cardOperationDTO, Authentication authentication){
+        Optional<Card> optionalCard = cardReposiroty.findByNumber(cardOperationDTO.getCardNumber());
+        Client client = clientRepository.findByEmail(authentication.getName()).get();
+        //verifico que exista la tarjeta
+        if (optionalCard.isEmpty()) {
+            return new ResponseEntity<>("card doesn't exist", HttpStatus.FORBIDDEN);
+        }
+        Card searchedCard = optionalCard.get();
+        if (!searchedCard.getCvv().equals(cardOperationDTO.getCvv())) {
+            return new ResponseEntity<>("CVV wrong", HttpStatus.FORBIDDEN);
+        }
+        //verifico que los datos no esten vacios
+        if (cardOperationDTO.getAmount() <= 0 || cardOperationDTO.getCardNumber().isEmpty() || cardOperationDTO.getCvv().isEmpty() || cardOperationDTO.getDescription().isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        //verificar que sea de débito la tarjeta
+        if (searchedCard.getType().equals(CardType.CREDIT)){
+            return new ResponseEntity<>("You can't do this operation. Use a DEBIT CARD", HttpStatus.FORBIDDEN);
+        }
+        //verificacion de montos de cuenta, traer el set de cuentas y verificar que el monto de débito sea menor al saldo
+
+        if (accountRepository.findByBalanceGreaterThanAndClient(cardOperationDTO.getAmount(), client).isEmpty()){
+            return new ResponseEntity<>("You don't have enough money.", HttpStatus.FORBIDDEN);
+        }
+        List<Account> accountsWithBalance = accountRepository.findByBalanceGreaterThanAndClient(cardOperationDTO.getAmount(), client);
+        //tarjeta vencida
+        if(!cardReposiroty.findByThruDateLessThan(LocalDate.now()).isEmpty()){
+            return new ResponseEntity<>("You're card is expired", HttpStatus.FORBIDDEN);
+        }
+
+        Transaction debitTransaction = new Transaction(cardOperationDTO.getAmount(), cardOperationDTO.getDescription(), LocalDateTime.now(),accountsWithBalance.get(0),TransactionType.DEBIT);
+        transactionRepository.save(debitTransaction);
+
+        return new ResponseEntity<>("You payed something", HttpStatus.CREATED);
     }
 }
 

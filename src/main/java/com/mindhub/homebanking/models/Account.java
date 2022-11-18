@@ -33,7 +33,7 @@ public class Account {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)//cascade para borrar todo lo relacionado
     private Set<Transaction> transactions = new HashSet<>();
 
     public Account() {

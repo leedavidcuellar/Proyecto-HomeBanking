@@ -85,4 +85,25 @@ public class LoanController {
         return new ResponseEntity<>("Loan Approved",HttpStatus.CREATED);
     }
 
+    @PostMapping("/admin/loans")
+    public ResponseEntity<Object> createLoan(Authentication authentication, @RequestBody Loan loan) {
+        Client client = clientRepository.findByEmail(authentication.getName()).get();
+        if (!client.getEmail().contains("@admin")) {
+            return new ResponseEntity<>("Access Denied", HttpStatus.FORBIDDEN);
+        }
+        Loan loan1 = new Loan(loan.getName(), loan.getMaxAmount(), loan.getPayments());
+        loanRepository.save(loan1);
+        return new ResponseEntity<>("Successfully Created", HttpStatus.CREATED);
+    }
 }
+
+//estructura JSON
+//      {
+//         "name": "ipotecario",
+//        "maxAmount": 50.0,
+//        "payments": [
+//            2,
+//            4
+//            ]
+//        }
+

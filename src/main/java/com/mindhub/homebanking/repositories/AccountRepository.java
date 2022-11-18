@@ -1,6 +1,7 @@
 package com.mindhub.homebanking.repositories;
 
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -19,4 +20,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     // -Buscar una lista de cuentas por en la cual sue fecha se menor a la que le pasemos por parametro
     List<Optional<Account>> findByCreationDateLessThan(LocalDateTime creationDate);
+
+    List<Account> findByBalanceGreaterThanAndClient(double amount, Client client);
 }

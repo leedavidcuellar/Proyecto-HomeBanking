@@ -32,7 +32,8 @@ public class WebAuthorization{
                 .antMatchers(HttpMethod.POST, "/api/login", "/api/clients").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/clients/current/accounts").hasAuthority("CLIENT")
                 .antMatchers(HttpMethod.POST, "/api/clients/current/cards").hasAuthority("CLIENT")
-                .antMatchers("/**").hasAuthority("CLIENT");
+                .antMatchers(HttpMethod.POST, "/api/admin/loans").hasAuthority("ADMIN")
+                .antMatchers("/**").hasAnyAuthority("CLIENT","ADMIN");
 
 
         //axios.post('/api/login',`email=${this.email}&password=${this.password}`)
