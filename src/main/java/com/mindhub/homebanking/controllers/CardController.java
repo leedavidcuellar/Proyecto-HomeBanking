@@ -102,6 +102,11 @@ public class CardController {
         }
     }
 
+    @GetMapping("/cardOperation")
+    public List<CardDTO> getCardOperation(){
+        return cardReposiroty.findAll().stream().map(CardDTO::new).collect(Collectors.toList());
+    }
+
     @Transactional
     @PostMapping("/cardOperation")
     public ResponseEntity<Object> createCardOperation(@RequestBody com.minduhub.homebanking.dtos.CardOperationDTO cardOperationDTO, Authentication authentication){
